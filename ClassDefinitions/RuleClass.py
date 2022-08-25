@@ -9,6 +9,8 @@ class Rule:
         self.rule_type = element.find(f"./{formNS}RuleType").text
         self.title = element.find(f"./{formNS}Title").text
         self.expression_value = element.find(f"./{formNS}ExpressionValue").text
+        self.hide = element.find(f"./{formNS}Hide")
+        self.disable = element.find(f"./{formNS}Disable")
         self.control_id_list = list()
 
         self.element = element
