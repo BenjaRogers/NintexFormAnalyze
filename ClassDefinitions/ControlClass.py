@@ -38,11 +38,12 @@ class Control:
         self.display_name = element.find(f"{controlNS}DisplayName").text
         self.control_id = element.find(f"{controlNS}FormControlTypeUniqueId").text  # element FormControlTypeUniqueID
         self.data_field = None
+        self.jvar = None
         self.control_formula_occurences = list()
         self.control_sql_occurences = list()
         self.rule_occurences = list()
         self.set_data_field()
-
+        self.set_jvar()
 
         # Calc specific
         self.formula = None
@@ -95,6 +96,10 @@ class Control:
         if self.element.find(f"{controlNS}DataFieldDisplayName") is not None:
             self.data_field = self.element.find(f"{controlNS}DataFieldDisplayName").text
 
+    def set_jvar(self):
+        if self.element.find(f"{controlNS}ExposedClientIdJavascriptVariable") is not None:
+            self.jvar = self.element.find(f"{controlNS}ExposedClientIdJavascriptVariable").text
+
     def get_name(self) -> str:
         return self.name
 
@@ -116,6 +121,7 @@ class Control:
                 if self.unique_id in rule.expression_value:
                     self.rule_occurences.append(rule)
 
+
     def __str__(self) -> str:
         string = f"{{\n"  \
                 f"name : {self.name} \n" \
@@ -128,5 +134,6 @@ class Control:
                  f"Rule Occurence : {self.rule_occurences} \n" \
                  f"Formula Occurence : {self.control_formula_occurences} \n" \
                  f"SQL Occurences : {self.control_sql_occurences} \n" \
+                 f"JavaScript Var : {self.jvar} \n" \
                  f"}}"
         return string

@@ -1,13 +1,14 @@
 import xml.etree.ElementTree as ET
 from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
+from ClassDefinitions.FormClass import Form
 from utilities import *
 
 formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 
 def main2():
-    input_filename = 'XML/IndividualTravelDev.xml'
+    input_filename = 'XML/IndividualTravelDev_160.xml'
     out_unused_rules = 'UnusedRules.txt'
     control_objects = list()
     rule_objects = list()
@@ -60,8 +61,8 @@ def main2():
     for rule in rule_objects:
         print(rule)
 
-    # for control in control_objects:
-    #     print(control)
+    for control in control_objects:
+        print(control)
     # for unused_rule in unused_rules:
     #     print(unused_rule.title)
 
@@ -73,5 +74,11 @@ def main2():
 
 
 if __name__ == '__main__':
-    main2()
+    # main2()
+
+    form = Form("XML/IndividualTravelDev_160.xml")
+    # print(form.script)
+
+    for variable in form.variable_objects_list:
+        print(variable)
 

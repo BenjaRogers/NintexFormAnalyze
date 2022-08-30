@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
-
+from ClassDefinitions.VariableClass import Variable
 
 class Form:
 
@@ -15,6 +15,18 @@ class Form:
 
         self.rule_elements_list = self.get_rule_elements_list()
         self.rule_objects_list = self.create_rule_objects_list()
+
+        self.variable_elements_list = self.get_variable_elements_list()
+        self.variable_objects_list = self.create_variable_objects_list()
+
+        self.script = self.get_script()
+
+    def get_script(self):
+        tree = ET.parse(self.filename)
+        root = tree.getroot()
+        script = root.find(f"./{self.formNS}Script").text
+
+        return script
 
     def get_control_elements_list(self):
         tree = ET.parse(self.filename)
@@ -44,3 +56,17 @@ class Form:
             rule_objects_list.append(Rule(rule_element))
 
         return rule_objects_list
+
+    def get_variable_elements_list(self):
+        tree = ET.parse(self.filename)
+        root = tree.getroot()
+        variable_elements_list = root.findall(f"./{self.formNS}UserFormVariables/{self.formNS}UserFormVariable")
+
+        return variable_elements_list
+
+    def create_variable_objects_list(self):
+        variable_objects_list = list()
+        for variable_element in self.variable_elements_list:
+            variable_objects_list.append(Variable(variable_element))
+
+        return variable_objects_list
