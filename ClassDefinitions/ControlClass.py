@@ -124,5 +124,9 @@ class Control:
                 f"type : {self.simple_type} \n" \
                 f"formula : {self.formula} \n" \
                  f"sql : {self.sql} \n" \
-                 f"Column Name : {self.data_field} \n}}"
+                 f"Column Name : {self.data_field} \n" \
+                 f"Rule Occurence : {self.rule_occurences} \n" \
+                 f"Formula Occurence : {self.control_formula_occurences} \n" \
+                 f"SQL Occurences : {self.control_sql_occurences} \n" \
+                 f"}}"
         return string

@@ -9,8 +9,8 @@ class Rule:
         self.rule_type = element.find(f"./{formNS}RuleType").text
         self.title = element.find(f"./{formNS}Title").text
         self.expression_value = element.find(f"./{formNS}ExpressionValue").text
-        self.hide = element.find(f"./{formNS}Hide")
-        self.disable = element.find(f"./{formNS}Disable")
+        self.hide = element.find(f"./{formNS}Hide").text
+        self.disable = element.find(f"./{formNS}Disable").text
         self.control_id_list = list()
 
         self.element = element
@@ -32,5 +32,7 @@ class Rule:
                 f"ID: {self.unique_id} \n" \
                 f"Title: {self.title} \n" \
                 f"Expression : {self.expression_value} \n" \
-                f"ID's : {self.control_id_list} \n}}"
+                f"ID's : {self.control_id_list} \n" \
+                 f"Hide : {self.hide} \n " \
+                 f"Disable : {self.disable} \n}}"
         return string
