@@ -12,11 +12,8 @@ class Rule:
         self.hide = element.find(f"./{formNS}Hide").text
         self.disable = element.find(f"./{formNS}Disable").text
         self.control_id_list = list()
-
         self.element = element
-
         self.set_control_id_list()
-
         self.unique_id = element.find(f"./{formNS}Id").text
 
         self.element = None
@@ -34,5 +31,5 @@ class Rule:
                 f"Expression : {self.expression_value} \n" \
                 f"ID's : {self.control_id_list} \n" \
                  f"Hide : {self.hide} \n " \
-                 f"Disable : {self.disable} \n}}"
+                 f"Disable : {self.disable} \n}} \n \n"
         return string

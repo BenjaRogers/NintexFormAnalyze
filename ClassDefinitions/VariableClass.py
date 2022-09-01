@@ -20,6 +20,6 @@ class Variable:
                  f"Expression : {self.expression} \n" \
                  f"Connected : {self.connected} \n" \
                  f"Type : {self.type}\n" \
-                 f"}}\n"
+                 f"}}\n \n"
 
         return string

@@ -42,6 +42,8 @@ class Control:
         self.control_formula_occurences = list()
         self.control_sql_occurences = list()
         self.rule_occurences = list()
+        self.variable_occurences = list()
+
         self.set_data_field()
         self.set_jvar()
 
@@ -110,16 +112,28 @@ class Control:
         for control in controls:
             if control.formula is not None:
                 if self.unique_id in control.formula:
-                    self.control_formula_occurences.append(control)
+                    self.control_formula_occurences.append(control.get_occurence_string('calc'))
             if control.sql is not None:
                 if self.unique_id in control.sql:
-                    self.control_sql_occurences.append(control)
+                    self.control_sql_occurences.append(control.get_occurence_string('sql'))
 
     def get_rule_occurences(self, rules:list):
         for rule in rules:
             if rule.expression_value is not None:
                 if self.unique_id in rule.expression_value:
                     self.rule_occurences.append(rule)
+
+    def get_variable_occurences(self, variables:list):
+        for variable in variables:
+            if self.unique_id in variable.expression:
+                self.variable_occurences.append(variable)
+
+    def get_occurence_string(self, occurence_type: str) -> str:
+        if occurence_type == 'calc':
+            return f"{{Name: {self.name}, ID: {self.unique_id}, Forumla: {self.formula}}}"
+
+        if occurence_type == 'sql':
+            return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.sql}}}"
 
 
     def __str__(self) -> str:
@@ -134,6 +148,7 @@ class Control:
                  f"Rule Occurence : {self.rule_occurences} \n" \
                  f"Formula Occurence : {self.control_formula_occurences} \n" \
                  f"SQL Occurences : {self.control_sql_occurences} \n" \
+                 f"Variable Occurences : {self.variable_occurences} \n" \
                  f"JavaScript Var : {self.jvar} \n" \
-                 f"}}"
+                 f"}}\n \n"
         return string

@@ -32,7 +32,6 @@ def create_rule_object(rule_element: ET) -> Rule:
     return Rule(rule_element)
 
 
-# Random utility functions
 # print list of children of root
 def get_control_elements(filename: str):
     tree = ET.parse(filename)
@@ -73,6 +72,7 @@ def get_unreferenced_controls(controls_list: list) -> list:
     return unreferenced_controls
 
 
+# get list of controls that are not connected to sharepoint column
 def get_unconnected_controls(controls_list: list) -> list:
     unconnected_controls = list()
     for control in controls_list:
@@ -82,6 +82,16 @@ def get_unconnected_controls(controls_list: list) -> list:
     return unconnected_controls
 
 
+# get list of controls not referenced by form variables
+def get_unreferenced_controls_vars(controls_list: list) -> list:
+    unreferenced_controls = list()
+    for control in controls_list:
+        if len(control.variable_occurences) == 0 and control.simple_type != 'label':
+            controls_list.append(control)
+
+    return unreferenced_controls
+
+# get list of controls that are not connected to sharepoint column &
 def get_unconnected_unreferenced_controls(unconnected_list: list, unreferenced_list: list) -> list:
     uncon_unref = list()
     for control in unreferenced_list:

@@ -8,14 +8,32 @@ formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 
 def main2():
+    # Add form xml file here
     input_filename = 'XML/IndividualTravelDev_160.xml'
-    out_unused_rules = 'UnusedRules.txt'
+
+    # File paths for output txt files
+    output_directory = './output'
+
+    # Open txt files
+    out_all_rules = open(output_directory + '/AllRules.txt', 'w')
+    out_ineffective_rules = open(output_directory + '/IneffectiveRules.txt', 'w')
+    out_unused_rules = open(output_directory + '/UnusedRules.txt', 'w')
+    out_all_controls = open(output_directory + '/AllControls.txt', 'w')
+
+    # Strings to write to output files
+    all_rules_str = ""
+    ineffective_rules_str = ""
+    unused_rules_str = ""
+    all_controls_str = ""
+
     control_objects = list()
     rule_objects = list()
 
-    # Parse all rule & control objects from XML file
+
+    # Parse all control, rule & variable elements from XML file
     controls_list = get_controls_list(input_filename)
     rule_list = get_rule_list(input_filename)
+
 
     # Iterate xml ET to create list of control element objects -> ET
     for element in controls_list:
@@ -32,39 +50,43 @@ def main2():
     for control in control_objects:
         control.get_control_occurences(control_objects)
         control.get_rule_occurences(rule_objects)
+        all_controls_str += str(control)
 
-    # create list of controls with no calc, sql associated controls & no connected sp column
-    unreferenced_controls = get_unreferenced_controls(control_objects)
-    unconnected_controls = get_unconnected_controls(control_objects)
-    uncon_unref_controls = get_unconnected_unreferenced_controls(unconnected_controls, unreferenced_controls)
+    out_all_controls.write(all_controls_str)
+    out_all_controls.close()
 
-    print("Unused rules:\n")
-    for rule in get_unused_rules(rule_objects):
-        print(rule.title)
-    print("Uneffective rules:\n")
-    for rule in get_uneffective_rules(rule_objects):
-        print(rule)
-    print("Unreferenced controls:\n")
-    for control in unreferenced_controls:
-        print(control)
-    print("############################################ \nUnconnected Controls\n")
-    for control in unconnected_controls:
-        print(control)
-    print("############################################ \nUnconnected & Unreferenced Controls\n")
-    for control in uncon_unref_controls:
-        print(control)
-
-    print(f"Unreferenced Length: {len(unreferenced_controls)}"
-          f"Unconnected Length: {len(unconnected_controls)}"
-          f"Unconnected & unreferenced length: {len(uncon_unref_controls)}")
-
-    for rule in rule_objects:
-        print(rule)
-
-    for control in control_objects:
-        print(control)
-    # for unused_rule in unused_rules:
-    #     print(unused_rule.title)
+    # # create list of controls with no calc, sql associated controls & no connected sp column
+    # unreferenced_controls = get_unreferenced_controls(control_objects)
+    # unconnected_controls = get_unconnected_controls(control_objects)
+    # uncon_unref_controls = get_unconnected_unreferenced_controls(unconnected_controls, unreferenced_controls)
+    #
+    # print("Unused rules:\n")
+    # for rule in get_unused_rules(rule_objects):
+    #     print(rule.title)
+    # print("Uneffective rules:\n")
+    # for rule in get_uneffective_rules(rule_objects):
+    #     print(rule)
+    # print("Unreferenced controls:\n")
+    # for control in unreferenced_controls:
+    #     print(control)
+    # print("############################################ \nUnconnected Controls\n")
+    # for control in unconnected_controls:
+    #     print(control)
+    # print("############################################ \nUnconnected & Unreferenced Controls\n")
+    # for control in uncon_unref_controls:
+    #     print(control)
+    #
+    # print(f"Unreferenced Length: {len(unreferenced_controls)}"
+    #       f"Unconnected Length: {len(unconnected_controls)}"
+    #       f"Unconnected & unreferenced length: {len(uncon_unref_controls)}")
+    #
+    # for rule in rule_objects:
+    #     print(rule)
+    #
+    # for control in control_objects:
+    #     print(control)
+    # # for unused_rule in unused_rules:
+    # #     print(unused_rule.title)
 
 
 
@@ -75,10 +97,45 @@ def main2():
 
 if __name__ == '__main__':
     # main2()
+    input_filename = 'XML/IndividualTravelDev_160.xml'
+    output_directory = './output'
 
-    form = Form("XML/IndividualTravelDev_160.xml")
-    # print(form.script)
+    # Open txt files
+    out_all_rules = open(output_directory + '/AllRules.txt', 'w')
+    # out_ineffective_rules = open(output_directory + '/IneffectiveRules.txt', 'w')
+    # out_unused_rules = open(output_directory + '/UnusedRules.txt', 'w')
+    out_all_controls = open(output_directory + '/AllControls.txt', 'w')
+    out_all_vars = open(output_directory + '/AllVariables.txt', 'w')
 
+    # Strings to write to output files
+    all_rules_str = ""
+    ineffective_rules_str = ""
+    unused_rules_str = ""
+    all_controls_str = ""
+    all_variables_str = ""
+
+    # Create form object
+    form = Form(input_filename)
+
+    # Create allcontrols string & write to file
     for variable in form.variable_objects_list:
-        print(variable)
+        all_variables_str += str(variable)
+    out_all_vars.write(all_variables_str)
+    out_all_vars.close()
+
+    # Create all_rules string & write to file
+    for rule in form.rule_objects_list:
+        all_rules_str += str(rule)
+    out_all_rules.write(all_rules_str)
+    out_all_vars.close()
+
+    # Create all_controls string & write to file
+    for control in form.control_objects_list:
+        all_controls_str += str(control)
+    out_all_controls.write(all_controls_str)
+    out_all_controls.close()
+
+
+
+
 
