@@ -121,7 +121,7 @@ class Control:
         for rule in rules:
             if rule.expression_value is not None:
                 if self.unique_id in rule.expression_value:
-                    self.rule_occurences.append(rule)
+                    self.rule_occurences.append(rule.get_occurence_string())
 
     def get_variable_occurences(self, variables:list):
         for variable in variables:
@@ -130,7 +130,7 @@ class Control:
 
     def get_occurence_string(self, occurence_type: str) -> str:
         if occurence_type == 'calc':
-            return f"{{Name: {self.name}, ID: {self.unique_id}, Forumla: {self.formula}}}"
+            return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.formula}}}"
 
         if occurence_type == 'sql':
             return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.sql}}}"

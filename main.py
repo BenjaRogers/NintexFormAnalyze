@@ -104,15 +104,25 @@ if __name__ == '__main__':
     out_all_rules = open(output_directory + '/AllRules.txt', 'w')
     # out_ineffective_rules = open(output_directory + '/IneffectiveRules.txt', 'w')
     # out_unused_rules = open(output_directory + '/UnusedRules.txt', 'w')
+
     out_all_controls = open(output_directory + '/AllControls.txt', 'w')
+    out_unconnected_controls = open(output_directory + '/UnconnectedControls.txt', 'w')
+    out_unreferenced_controls = open(output_directory + '/UnreferencedControls.txt', 'w')
+    out_uncon_unref_controls = open(output_directory + '/UnconnectedUnreferencedControls.txt', 'w')
     out_all_vars = open(output_directory + '/AllVariables.txt', 'w')
 
     # Strings to write to output files
     all_rules_str = ""
     ineffective_rules_str = ""
     unused_rules_str = ""
+
     all_controls_str = ""
+    unconnected_controls_str = ""
+    unreferenced_controls_str = ""
+    uncon_unref_str = ""
+
     all_variables_str = ""
+
 
     # Create form object
     form = Form(input_filename)
@@ -135,6 +145,22 @@ if __name__ == '__main__':
     out_all_controls.write(all_controls_str)
     out_all_controls.close()
 
+    # Create unconnected_controls string & write to file
+    for control in form.unconnected_controls:
+        unconnected_controls_str += str(control)
+    out_unconnected_controls.write(unconnected_controls_str)
+    out_unconnected_controls.close()
+
+    # Create unreferenced_controls string & write to file
+    for control in form.unreferenced_controls:
+        unreferenced_controls_str += str(control)
+    out_unreferenced_controls.write(all_controls_str)
+    out_unreferenced_controls.close()
+
+    for control in form.uncon_unref_controls:
+        uncon_unref_str += str(control)
+    out_uncon_unref_controls.write(uncon_unref_str)
+    out_uncon_unref_controls.close()
 
 
 

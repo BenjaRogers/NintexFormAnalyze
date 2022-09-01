@@ -23,6 +23,13 @@ class Rule:
         for each in control_elements:
             self.control_id_list.append(each.text)
 
+    def get_occurence_string(self) -> str:
+        if self.rule_type == 'Formatting':
+            return f"{{Name: {self.title}, Type: {self.rule_type}, Hide: {self.hide}, Disable: {self.disable}, Expression: {self.expression_value}}}"
+
+        if self.rule_type == 'Validation':
+            return f"{{Name: {self.title}, Type: {self.rule_type}, Expression: {self.expression_value}}}"
+
     def __str__(self) -> str:
         string = f"{{\n"  \
                 f"Type: {self.rule_type} \n" \
