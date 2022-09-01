@@ -13,6 +13,9 @@ class Variable:
         self.type = element.find(f"./{formNS}Type").text
         self.connected = element.find(f"./{formNS}ConnectedTo").text
 
+    def get_occurence_string(self):
+        return f"{{Name: {self.name}, Type: {self.type}, Expression: {self.expression}}}"
+
     def __str__(self):
         string = f"{{\n" \
                  f"Name : {self.name} \n" \

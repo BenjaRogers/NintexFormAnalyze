@@ -108,7 +108,7 @@ class Control:
     def get_unique_id(self) -> str:
         return self.unique_id
 
-    def get_control_occurences(self, controls: list):
+    def get_control_occurences(self, controls: list, variables: list):
         for control in controls:
             if control.formula is not None:
                 if self.unique_id in control.formula:
@@ -116,6 +116,11 @@ class Control:
             if control.sql is not None:
                 if self.unique_id in control.sql:
                     self.control_sql_occurences.append(control.get_occurence_string('sql'))
+
+        for variable in variables:
+            if variable.expression is not None:
+                if self.unique_id in variable.expression:
+                    self.variable_occurences.append(variable.get_occurence_string())
 
     def get_rule_occurences(self, rules:list):
         for rule in rules:

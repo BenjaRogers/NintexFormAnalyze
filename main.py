@@ -96,7 +96,6 @@ def main2():
 
 
 if __name__ == '__main__':
-    # main2()
     input_filename = 'XML/IndividualTravelDev_160.xml'
     output_directory = './output'
 
@@ -154,7 +153,7 @@ if __name__ == '__main__':
     # Create unreferenced_controls string & write to file
     for control in form.unreferenced_controls:
         unreferenced_controls_str += str(control)
-    out_unreferenced_controls.write(all_controls_str)
+    out_unreferenced_controls.write(unreferenced_controls_str)
     out_unreferenced_controls.close()
 
     for control in form.uncon_unref_controls:
