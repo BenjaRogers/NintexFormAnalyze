@@ -3,7 +3,7 @@ from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
 from ClassDefinitions.FormClass import Form
 from utilities import *
-
+from ClassDefinitions.WorkflowClass import WorkFlow
 formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 
@@ -96,70 +96,81 @@ def main2():
 
 
 if __name__ == '__main__':
-    input_filename = 'XML/IndividualTravelDev_160.xml'
-    output_directory = './output'
+    wf = WorkFlow("XML/Travel_Authorization_New.xml")
+    wf.print_objects()
+    print(wf.num_fields)
 
-    # Open txt files
-    out_all_rules = open(output_directory + '/AllRules.txt', 'w')
-    # out_ineffective_rules = open(output_directory + '/IneffectiveRules.txt', 'w')
-    # out_unused_rules = open(output_directory + '/UnusedRules.txt', 'w')
+    # input_filename = 'XML/IndividualTravelDev_160.xml'
+    # output_directory = './output'
+    #
+    # # Open txt files
+    # out_all_rules = open(output_directory + '/AllRules.txt', 'w')
+    # # out_ineffective_rules = open(output_directory + '/IneffectiveRules.txt', 'w')
+    # # out_unused_rules = open(output_directory + '/UnusedRules.txt', 'w')
+    #
+    # out_all_controls = open(output_directory + '/AllControls.txt', 'w')
+    # out_unconnected_controls = open(output_directory + '/UnconnectedControls.txt', 'w')
+    # out_unreferenced_controls = open(output_directory + '/UnreferencedControls.txt', 'w')
+    # out_uncon_unref_controls = open(output_directory + '/UnconnectedUnreferencedControls.txt', 'w')
+    # out_all_vars = open(output_directory + '/AllVariables.txt', 'w')
+    # out_script = open(output_directory + '/Script.txt', 'w')
+    #
+    # # Strings to write to output files
+    # all_rules_str = ""
+    # ineffective_rules_str = ""
+    # unused_rules_str = ""
+    #
+    # all_controls_str = ""
+    # unconnected_controls_str = ""
+    # unreferenced_controls_str = ""
+    # uncon_unref_str = ""
+    #
+    # all_variables_str = ""
+    #
+    #
+    # # Create form object
+    # form = Form(input_filename)
+    #
+    # # Create allcontrols string & write to file
+    # for variable in form.variable_objects_list:
+    #     all_variables_str += str(variable)
+    # out_all_vars.write(all_variables_str)
+    # out_all_vars.close()
+    #
+    # # Create all_rules string & write to file
+    # for rule in form.rule_objects_list:
+    #     all_rules_str += str(rule)
+    # out_all_rules.write(all_rules_str)
+    # out_all_vars.close()
+    #
+    # # Create all_controls string & write to file
+    # for control in form.control_objects_list:
+    #     all_controls_str += str(control)
+    # out_all_controls.write(all_controls_str)
+    # out_all_controls.close()
+    #
+    # # Create unconnected_controls string & write to file
+    # for control in form.unconnected_controls:
+    #     unconnected_controls_str += str(control)
+    # out_unconnected_controls.write(unconnected_controls_str)
+    # out_unconnected_controls.close()
+    #
+    # # Create unreferenced_controls string & write to file
+    # for control in form.unreferenced_controls:
+    #     unreferenced_controls_str += str(control)
+    # out_unreferenced_controls.write(unreferenced_controls_str)
+    # out_unreferenced_controls.close()
+    #
+    # for control in form.uncon_unref_controls:
+    #     uncon_unref_str += str(control)
+    # out_uncon_unref_controls.write(uncon_unref_str)
+    # out_uncon_unref_controls.close()
+    #
+    # out_script.write(form.script)
+    # out_script.close()
 
-    out_all_controls = open(output_directory + '/AllControls.txt', 'w')
-    out_unconnected_controls = open(output_directory + '/UnconnectedControls.txt', 'w')
-    out_unreferenced_controls = open(output_directory + '/UnreferencedControls.txt', 'w')
-    out_uncon_unref_controls = open(output_directory + '/UnconnectedUnreferencedControls.txt', 'w')
-    out_all_vars = open(output_directory + '/AllVariables.txt', 'w')
-
-    # Strings to write to output files
-    all_rules_str = ""
-    ineffective_rules_str = ""
-    unused_rules_str = ""
-
-    all_controls_str = ""
-    unconnected_controls_str = ""
-    unreferenced_controls_str = ""
-    uncon_unref_str = ""
-
-    all_variables_str = ""
 
 
-    # Create form object
-    form = Form(input_filename)
-
-    # Create allcontrols string & write to file
-    for variable in form.variable_objects_list:
-        all_variables_str += str(variable)
-    out_all_vars.write(all_variables_str)
-    out_all_vars.close()
-
-    # Create all_rules string & write to file
-    for rule in form.rule_objects_list:
-        all_rules_str += str(rule)
-    out_all_rules.write(all_rules_str)
-    out_all_vars.close()
-
-    # Create all_controls string & write to file
-    for control in form.control_objects_list:
-        all_controls_str += str(control)
-    out_all_controls.write(all_controls_str)
-    out_all_controls.close()
-
-    # Create unconnected_controls string & write to file
-    for control in form.unconnected_controls:
-        unconnected_controls_str += str(control)
-    out_unconnected_controls.write(unconnected_controls_str)
-    out_unconnected_controls.close()
-
-    # Create unreferenced_controls string & write to file
-    for control in form.unreferenced_controls:
-        unreferenced_controls_str += str(control)
-    out_unreferenced_controls.write(unreferenced_controls_str)
-    out_unreferenced_controls.close()
-
-    for control in form.uncon_unref_controls:
-        uncon_unref_str += str(control)
-    out_uncon_unref_controls.write(uncon_unref_str)
-    out_uncon_unref_controls.close()
 
 
 

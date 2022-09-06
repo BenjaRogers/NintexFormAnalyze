@@ -81,7 +81,7 @@ class Form:
         for control in self.control_objects_list:
             control.get_control_occurences(self.control_objects_list, self.variable_objects_list)
             control.get_rule_occurences(self.rule_objects_list)
-
+            control.get_script_occurences(self.script)
 
     def get_unreferenced_controls(self) -> list:
         unreferenced_controls = list()
@@ -107,3 +107,4 @@ class Form:
                 uncon_unref.append(control)
 
         return uncon_unref
+

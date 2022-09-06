@@ -53,6 +53,8 @@ class Control:
         self.sql = None
 
 
+        self.in_script = False
+
         self.set_type_specific_properties()
 
         # Clear element attribute since it's been parsed
@@ -133,6 +135,11 @@ class Control:
             if self.unique_id in variable.expression:
                 self.variable_occurences.append(variable)
 
+    def get_script_occurences(self, form_script: str):
+        if self.jvar is not None:
+            if self.jvar in form_script:
+                self.in_script = True
+
     def get_occurence_string(self, occurence_type: str) -> str:
         if occurence_type == 'calc':
             return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.formula}}}"
@@ -155,5 +162,6 @@ class Control:
                  f"SQL Occurences : {self.control_sql_occurences} \n" \
                  f"Variable Occurences : {self.variable_occurences} \n" \
                  f"JavaScript Var : {self.jvar} \n" \
+                 f"In Script : {self.in_script}" \
                  f"}}\n \n"
         return string
