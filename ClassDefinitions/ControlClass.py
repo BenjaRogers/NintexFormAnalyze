@@ -52,8 +52,8 @@ class Control:
         # DataAccess specific
         self.sql = None
 
-
         self.in_script = False
+        self.in_workflow = False
 
         self.set_type_specific_properties()
 
@@ -148,6 +148,7 @@ class Control:
             return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.sql}}}"
 
 
+
     def __str__(self) -> str:
         string = f"{{\n"  \
                 f"name : {self.name} \n" \
@@ -164,4 +165,5 @@ class Control:
                  f"JavaScript Var : {self.jvar} \n" \
                  f"In Script : {self.in_script}" \
                  f"}}\n \n"
+
         return string
