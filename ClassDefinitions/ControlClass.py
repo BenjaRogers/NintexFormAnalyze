@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-
+from ClassDefinitions.WorkflowClass import WorkFlow
 """ CONTROL ID's
 FormControlTypeUniqueId | i:type
 
@@ -140,13 +140,19 @@ class Control:
             if self.jvar in form_script:
                 self.in_script = True
 
+    def get_workflow_occurences(self, field_references: list):
+        for field in field_references:
+            if self.data_field == field.display_name:
+                self.in_workflow = True
+                break
+
+
     def get_occurence_string(self, occurence_type: str) -> str:
         if occurence_type == 'calc':
             return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.formula}}}"
 
         if occurence_type == 'sql':
             return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.sql}}}"
-
 
 
     def __str__(self) -> str:
@@ -158,12 +164,13 @@ class Control:
                 f"formula : {self.formula} \n" \
                  f"sql : {self.sql} \n" \
                  f"Column Name : {self.data_field} \n" \
+                 f"In Workflow : {self.in_workflow} \n" \
                  f"Rule Occurence : {self.rule_occurences} \n" \
                  f"Formula Occurence : {self.control_formula_occurences} \n" \
                  f"SQL Occurences : {self.control_sql_occurences} \n" \
                  f"Variable Occurences : {self.variable_occurences} \n" \
                  f"JavaScript Var : {self.jvar} \n" \
-                 f"In Script : {self.in_script}" \
+                 f"In Script : {self.in_script} \n" \
                  f"}}\n \n"
 
         return string

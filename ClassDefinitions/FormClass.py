@@ -2,13 +2,15 @@ import xml.etree.ElementTree as ET
 from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
 from ClassDefinitions.VariableClass import Variable
+from ClassDefinitions.WorkflowClass import WorkFlow
 
 class Form:
 
-    def __init__(self, filename: str):
+    def __init__(self, form_filename: str, workflow_filenames: list):
         self.formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
         self.controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
-        self.filename = filename
+        self.form_filename = form_filename
+        self.workflow_filenames = workflow_filenames
 
         self.control_elements_list = self.get_control_elements_list()
         self.control_objects_list = self.create_control_objects_list()
@@ -21,6 +23,8 @@ class Form:
 
         self.script = self.get_script()
 
+        self.workflows = self.create_workflow()
+
         self.set_control_occurence_properties()
 
         self.unreferenced_controls = self.get_unreferenced_controls()
@@ -28,14 +32,14 @@ class Form:
         self.uncon_unref_controls = self.get_unconnected_unreferenced_controls()
 
     def get_script(self):
-        tree = ET.parse(self.filename)
+        tree = ET.parse(self.form_filename)
         root = tree.getroot()
         script = root.find(f"./{self.formNS}Script").text
 
         return script
 
     def get_control_elements_list(self):
-        tree = ET.parse(self.filename)
+        tree = ET.parse(self.form_filename)
         root = tree.getroot()
         data = ET.tostring(root)
         control_elements_list = root.findall(f"./{self.formNS}FormControls/{self.controlNS}FormControlProperties")
@@ -50,7 +54,7 @@ class Form:
         return control_objects_list
 
     def get_rule_elements_list(self):
-        tree = ET.parse(self.filename)
+        tree = ET.parse(self.form_filename)
         root = tree.getroot()
         rules_elements_list = root.findall(f"./{self.formNS}Rules/{self.formNS}Rule")
 
@@ -64,7 +68,7 @@ class Form:
         return rule_objects_list
 
     def get_variable_elements_list(self):
-        tree = ET.parse(self.filename)
+        tree = ET.parse(self.form_filename)
         root = tree.getroot()
         variable_elements_list = root.findall(f"./{self.formNS}UserFormVariables/{self.formNS}UserFormVariable")
 
@@ -77,11 +81,21 @@ class Form:
 
         return variable_objects_list
 
+    def create_workflow(self):
+        workflow_objects = list()
+        for workflow_file in self.workflow_filenames:
+            workflow_objects.append(WorkFlow(workflow_file))
+
+        return workflow_objects
+
     def set_control_occurence_properties(self):
         for control in self.control_objects_list:
             control.get_control_occurences(self.control_objects_list, self.variable_objects_list)
             control.get_rule_occurences(self.rule_objects_list)
             control.get_script_occurences(self.script)
+
+            for workflow in self.workflows:
+                control.get_workflow_occurences(workflow.field_objects)
 
     def get_unreferenced_controls(self) -> list:
         unreferenced_controls = list()

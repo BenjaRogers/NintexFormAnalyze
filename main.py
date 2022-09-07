@@ -96,9 +96,10 @@ def main2():
 
 
 if __name__ == '__main__':
-    wf = WorkFlow("XML/Travel_Authorization_New.xml")
+    # wf = WorkFlow("XML/Travel_Authorization_New.xml")
 
-    input_filename = 'XML/IndividualTravelDev_160.xml'
+    input_form_filename = 'XML/IndividualTravelDev_160.xml'
+    input_workflow_filenames = ["XML/Travel_Authorization_New.xml"]
     output_directory = './output'
 
     # Open txt files
@@ -131,7 +132,7 @@ if __name__ == '__main__':
 
 
     # Create form object
-    form = Form(input_filename)
+    form = Form(input_form_filename, input_workflow_filenames)
 
     # Create allcontrols string & write to file
     for variable in form.variable_objects_list:
@@ -170,10 +171,10 @@ if __name__ == '__main__':
     out_uncon_unref_controls.close()
 
     # Create all_fields string and write to file
-    for field in wf.field_objects:
-        all_fields_str += str(field)
-    out_all_fields.write(all_fields_str)
-    out_all_fields.close()
+    # for field in wf.field_objects:
+    #     all_fields_str += str(field)
+    # out_all_fields.write(all_fields_str)
+    # out_all_fields.close()
 
     out_script.write(form.script)
     out_script.close()
