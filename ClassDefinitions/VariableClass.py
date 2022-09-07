@@ -4,6 +4,7 @@ formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 controlIDNS = '{http://schemas.microsoft.com/2003/10/Serialization/Arrays}'
 
+# Variable objects for relevant Nintex form variable properties
 class Variable:
 
     def __init__(self, element: ET):
@@ -13,9 +14,11 @@ class Variable:
         self.type = element.find(f"./{formNS}Type").text
         self.connected = element.find(f"./{formNS}ConnectedTo").text
 
+    # Summarization of variable properties when referenced by controls
     def get_occurence_string(self):
         return f"{{Name: {self.name}, Type: {self.type}, Expression: {self.expression}}}"
 
+    # String representation of variable properties
     def __str__(self):
         string = f"{{\n" \
                  f"Name : {self.name} \n" \

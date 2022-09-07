@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-
+# Class for SP list columns referenced in workflow
 class Field:
 
     def __init__(self, element: ET):

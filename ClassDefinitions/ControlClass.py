@@ -26,6 +26,7 @@ formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 spControlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.SharePoint.FormControls}'
 
+# Control Class for relevant properties of Nintex form controls
 class Control:
 
     def __init__(self, element: ET):
@@ -60,6 +61,7 @@ class Control:
         # Clear element attribute since it's been parsed
         self.element = None
 
+    # Perform operations based on control type
     def set_type_specific_properties(self):
         if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e08':
             self.simple_type = 'image'
@@ -90,26 +92,25 @@ class Control:
         if self.control_id == '5f8b447a-4195-485b-9a04-477d7f24be73':
             self.simple_type = 'attachment'
 
+    # Set self.formula if control.simple_type is calculation
     def set_calculation_control(self):
         self.formula = self.element.find(f"{controlNS}Formula").text
 
+    # set self.sql if control.simple_type is dataAccess
     def set_data_access(self):
         self.sql = self.element.find(f"{spControlNS}SqlStatement").text
 
+    # Set column name @ self.data_field
     def set_data_field(self):
         if self.element.find(f"{controlNS}DataFieldDisplayName") is not None:
             self.data_field = self.element.find(f"{controlNS}DataFieldDisplayName").text
 
+    # Set self.jvar if control has a connect javascript variable
     def set_jvar(self):
         if self.element.find(f"{controlNS}ExposedClientIdJavascriptVariable") is not None:
             self.jvar = self.element.find(f"{controlNS}ExposedClientIdJavascriptVariable").text
 
-    def get_name(self) -> str:
-        return self.name
-
-    def get_unique_id(self) -> str:
-        return self.unique_id
-
+    # Find controls where this unique ID is referenced
     def get_control_occurences(self, controls: list, variables: list):
         for control in controls:
             if control.formula is not None:
@@ -124,29 +125,33 @@ class Control:
                 if self.unique_id in variable.expression:
                     self.variable_occurences.append(variable.get_occurence_string())
 
+    # Find where this control is referenced in rules
     def get_rule_occurences(self, rules:list):
         for rule in rules:
             if rule.expression_value is not None:
                 if self.unique_id in rule.expression_value:
                     self.rule_occurences.append(rule.get_occurence_string())
 
+    # Find where this control is referenced in form variables
     def get_variable_occurences(self, variables:list):
         for variable in variables:
             if self.unique_id in variable.expression:
                 self.variable_occurences.append(variable)
 
+    # Find if this control is referenced in form script
     def get_script_occurences(self, form_script: str):
         if self.jvar is not None:
             if self.jvar in form_script:
                 self.in_script = True
 
+    # Find if this control's connected SP property is referenced in workflow(s)
     def get_workflow_occurences(self, field_references: list):
         for field in field_references:
             if self.data_field == field.display_name:
                 self.in_workflow = True
                 break
 
-
+    # Return summarization of control properties when this control references another control
     def get_occurence_string(self, occurence_type: str) -> str:
         if occurence_type == 'calc':
             return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.formula}}}"
@@ -154,7 +159,7 @@ class Control:
         if occurence_type == 'sql':
             return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.sql}}}"
 
-
+    # String representation of control properties. Would like to jsonify this...
     def __str__(self) -> str:
         string = f"{{\n"  \
                 f"name : {self.name} \n" \
