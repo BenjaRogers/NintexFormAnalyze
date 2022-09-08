@@ -98,8 +98,8 @@ def main2():
 if __name__ == '__main__':
     # wf = WorkFlow("XML/Travel_Authorization_New.xml")
 
-    input_form_filename = 'XML/IndividualTravelDev_160.xml'
-    input_workflow_filenames = ["XML/Travel_Authorization_New.xml"]
+    input_form_filename = 'XML/Forms/IndividualTravelDev_216.xml'
+    input_workflow_filenames = ["XML/Workflows/Authorization_Workflow_Complete.nwf", "XML/Workflows/Reimbursement_Workflow_Complete.nwf", "XML/Workflows/Test_TR_Review.nwf"]
     output_directory = './output'
 
     # Open txt files

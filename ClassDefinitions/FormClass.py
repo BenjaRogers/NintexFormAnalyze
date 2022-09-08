@@ -4,6 +4,7 @@ from ClassDefinitions.RuleClass import Rule
 from ClassDefinitions.VariableClass import Variable
 from ClassDefinitions.WorkflowClass import WorkFlow
 
+
 # Class to contain arrays of type Control, Rule, Field, Workflow and Variable and then do comparison
 class Form:
 
@@ -113,7 +114,9 @@ class Form:
         unreferenced_controls = list()
         for control in self.control_objects_list:
             if len(control.control_formula_occurences) == 0 and len(control.control_sql_occurences) == 0 and \
-                    len(control.rule_occurences) == 0 and control.simple_type == 'calculation':
+                    len(control.rule_occurences) == 0 and (
+                    control.simple_type != "label" and control.simple_type != "panel"
+                    and control.simple_type != "image" and control.simple_type != "attachment"):
                 unreferenced_controls.append(control)
 
         return unreferenced_controls
@@ -122,7 +125,7 @@ class Form:
     def get_unconnected_controls(self) -> list:
         unconnected_controls = list()
         for control in self.control_objects_list:
-            if control.data_field is None and control.simple_type == "calculation":
+            if control.data_field is None and (control.simple_type != "label" and control.simple_type != "panel" and control.simple_type != "image" and control.simple_type != "attachment"):
                 unconnected_controls.append(control)
 
         return unconnected_controls
@@ -135,4 +138,3 @@ class Form:
                 uncon_unref.append(control)
 
         return uncon_unref
-
