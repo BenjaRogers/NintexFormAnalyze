@@ -13,7 +13,8 @@ c0a89c70-0781-4bd4-8623-f73675005e06 | d2p1:MultiLineTextBoxFormControlPropertie
 c0a89c70-0781-4bd4-8623-f73675005e14 | d2p1:PanelFormControlProperties
 c0a89c70-0781-4bd4-8623-f73675005e09 | d2p1:ButtonFormControlProperties
 7733d5bf-11c6-4bdc-a430-79c3065a796c | d3p1:DataAccessFormControlProperties
-c0a89c70-0781-4bd4-8623-f73675005e16 | d2p1:RepeaterFormControlProperties
+c0a89c70-0781-4bd4-8623-
+f73675005e16 | d2p1:RepeaterFormControlProperties
 c0a89c70-0781-4bd4-8623-f73675005e04 | d2p1:BooleanFormControlProperties
 5f8b447a-4195-485b-9a04-477d7f24be73 | d3p1:AttachmentFormControlProperties
 """
@@ -65,32 +66,34 @@ class Control:
     def set_type_specific_properties(self):
         if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e08':
             self.simple_type = 'image'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e00':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e00':
             self.simple_type = 'label'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e02':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e02':
             self.simple_type = 'choice'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e03':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e03':
             self.simple_type = 'dateTime'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e05':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e05':
             self.simple_type = 'textBox'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e17':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e17':
             self.simple_type = 'calculation'
             self.set_calculation_control()
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e06':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e06':
             self.simple_type = 'multiLine'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e14':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e14':
             self.simple_type = 'panel'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e09':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e09':
             self.simple_type = 'button'
-        if self.control_id == '7733d5bf-11c6-4bdc-a430-79c3065a796c':
+        elif self.control_id == '7733d5bf-11c6-4bdc-a430-79c3065a796c':
             self.simple_type = 'dataAccess'
             self.set_data_access()
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e16':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e16':
             self.simple_type = 'repeater'
-        if self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e04':
+        elif self.control_id == 'c0a89c70-0781-4bd4-8623-f73675005e04':
             self.simple_type = 'bool'
-        if self.control_id == '5f8b447a-4195-485b-9a04-477d7f24be73':
+        elif self.control_id == '5f8b447a-4195-485b-9a04-477d7f24be73':
             self.simple_type = 'attachment'
+        else:
+            self.simple_type = 'other'
 
     # Set self.formula if control.simple_type is calculation
     def set_calculation_control(self):

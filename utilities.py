@@ -1,3 +1,4 @@
+import os
 import xml.etree.ElementTree as ET
 from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
@@ -91,6 +92,7 @@ def get_unreferenced_controls_vars(controls_list: list) -> list:
 
     return unreferenced_controls
 
+
 # get list of controls that are not connected to sharepoint column &
 def get_unconnected_unreferenced_controls(unconnected_list: list, unreferenced_list: list) -> list:
     uncon_unref = list()
@@ -99,3 +101,22 @@ def get_unconnected_unreferenced_controls(unconnected_list: list, unreferenced_l
             uncon_unref.append(control)
 
     return uncon_unref
+
+
+def get_form_filepath(relative_path: str) -> str:
+    forms_names = os.listdir(relative_path)
+
+    if len(forms_names) == 1:
+        form_file_path = str(relative_path) + '/' + str(forms_names[0])
+
+    return form_file_path
+
+
+def get_workflow_filepath(relative_path: str) -> list:
+    workflow_paths = os.listdir(relative_path)
+    workflow_filepaths = list()
+    print(workflow_paths)
+
+    for workflow in workflow_paths:
+        workflow_filepaths.append(str(relative_path) + '/' + str(workflow))
+    return workflow_filepaths

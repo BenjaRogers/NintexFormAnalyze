@@ -3,13 +3,15 @@ from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
 from ClassDefinitions.FormClass import Form
 from utilities import *
+import os
+
 from ClassDefinitions.WorkflowClass import WorkFlow
 formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 
 def main2():
     # Add form xml file here
-    input_filename = 'XML/IndividualTravelDev_160.xml'
+    input_filename = 'XML/Forms/TravelProd_194.xml'
 
     # File paths for output txt files
     output_directory = './output'
@@ -96,10 +98,14 @@ def main2():
 
 
 if __name__ == '__main__':
-    # wf = WorkFlow("XML/Travel_Authorization_New.xml")
-
-    input_form_filename = 'XML/Forms/IndividualTravelDev_216.xml'
-    input_workflow_filenames = ["XML/Workflows/Authorization_Workflow_Complete.nwf", "XML/Workflows/Reimbursement_Workflow_Complete.nwf", "XML/Workflows/Test_TR_Review.nwf"]
+    ## wf = WorkFlow("XML/Travel_Authorization_New.xml")
+    #
+    # input_form_filename = 'XML/Forms/TravelProd_194.xml'
+    form_relative_path = "./XML/Forms"
+    workflows_relative_path = "./XML/Workflows"
+    # input_workflow_filenames = ["XML/Workflows/Authorization_Workflow_Complete.nwf", "XML/Workflows/Reimbursement_Workflow_Complete.nwf", "XML/Workflows/Test_TR_Review.nwf"]
+    input_workflow_filenames = get_workflow_filepath(workflows_relative_path)
+    input_form_filename = get_form_filepath(form_relative_path)
     output_directory = './output'
 
     # Open txt files
@@ -176,9 +182,9 @@ if __name__ == '__main__':
     # out_all_fields.write(all_fields_str)
     # out_all_fields.close()
 
-    out_script.write(form.script)
+    if form.script is not None:
+        out_script.write(form.script)
     out_script.close()
-
 
 
 
