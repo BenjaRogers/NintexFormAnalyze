@@ -27,6 +27,8 @@ class Form:
 
         self.workflows = self.create_workflow()
 
+        self.clean_controls_expression()
+        self.clean_rule_expression()
         self.set_control_occurence_properties()
 
         self.unreferenced_controls = self.get_unreferenced_controls()
@@ -69,8 +71,14 @@ class Form:
     # Create list of Rule objects @ rule_objects_list
     def create_rule_objects_list(self) -> list:
         rule_objects_list = list()
+
+        # Build all rule objects and add to rule_objects_list
         for rule_element in self.rule_elements_list:
             rule_objects_list.append(Rule(rule_element))
+
+        # Set control_name_list property for each rule
+        for rule in rule_objects_list:
+            rule.set_control_name_list(self.control_objects_list)
 
         return rule_objects_list
 
@@ -97,6 +105,45 @@ class Form:
             workflow_objects.append(WorkFlow(workflow_file))
 
         return workflow_objects
+
+    # Replace variable and control ID's with names for readability -> clean_formula
+    def clean_controls_expression(self):
+        for control in self.control_objects_list:
+
+            # Create clean_formula
+            if control.formula is not None:
+                # Replace control unique ID with control name
+                for compare_control in self.control_objects_list:
+                    if compare_control.unique_id in control.formula:
+                        control.clean_formula = control.clean_formula.replace(compare_control.unique_id, compare_control.name)
+
+                # Replace variable ID with variable name
+                # These are still called {Control:unique-id} in xml. So replace "Control" with "Variable" for clarity
+                for variable in self.variable_objects_list:
+                    if variable.id in control.formula:
+                        control.clean_formula = control.clean_formula.replace(f"Control:{variable.id}", f"Variable:{variable.name}")
+
+            # Create clean_sql
+            if control.sql is not None:
+                # Replace control unique ID with control name
+                for compare_control in self.control_objects_list:
+                    if compare_control.unique_id in control.sql:
+                        control.clean_sql = control.clean_sql.replace(compare_control.unique_id, compare_control.name)
+
+                # Replace variable ID with variable name
+                # These are still called {Control:unique-id} in xml. So replace "Control" with "Variable" for clarity
+                for variable in self.variable_objects_list:
+                    if variable.id in control.sql:
+                        variable.clean_sql = control.clean_sql.replace(f"Control:{variable.id}", f"Variable:{variable.name}")
+
+    # Replace control and variable ID's with names for readability
+    def clean_rule_expression(self):
+        for rule in self.rule_objects_list:
+            if rule.expression_value is not None:
+                for control in self.control_objects_list:
+                    if control.unique_id in rule.expression_value:
+                        rule.clean_expression_value = rule.clean_expression_value.replace(control.unique_id, control.name)
+
 
     # Iterate all controls and set control occurence properties in rules, variables, calculations, sql queries,
     # js script and associated SP column usage in workflows (still need to add wf occurence)

@@ -15,7 +15,7 @@ def get_controls_list(filename: str) -> list:
     return controls_list
 
 
-# Call control constructor - probably doesnt need a method
+# Call control constructor - probably doesn't need a method
 def create_control_object(control_element: ET) -> Control:
     return Control(control_element)
 

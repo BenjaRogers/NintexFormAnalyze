@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+import re
+
 from ClassDefinitions.WorkflowClass import WorkFlow
 """ CONTROL ID's
 FormControlTypeUniqueId | i:type
@@ -51,8 +53,12 @@ class Control:
 
         # Calc specific
         self.formula = None
+        self.clean_formula = None
+
         # DataAccess specific
         self.sql = None
+        self.clean_sql = None
+        self.sql_data_source = None
 
         self.in_script = False
         self.in_workflow = False
@@ -97,11 +103,33 @@ class Control:
 
     # Set self.formula if control.simple_type is calculation
     def set_calculation_control(self):
-        self.formula = self.element.find(f"{controlNS}Formula").text
+        formula = self.element.find(f"{controlNS}Formula").text
+        self.formula = formula
+
+        # Replace html symbols with literals for readability
+        clean_formula = formula.replace("&nbsp;", " ")
+        clean_formula = clean_formula.replace("&amp;", "&")
+        clean_formula = clean_formula.replace("&lt;", '<')
+        clean_formula = clean_formula.replace("&le;", '<=')
+        clean_formula = clean_formula.replace("&gt;", '>')
+        clean_formula = clean_formula.replace("&ge;", '>=')
+
+        self.clean_formula = clean_formula
 
     # set self.sql if control.simple_type is dataAccess
     def set_data_access(self):
-        self.sql = self.element.find(f"{spControlNS}SqlStatement").text
+        sql = self.element.find(f"{spControlNS}SqlStatement").text
+        self.sql = sql
+
+        # Replace html symbols with literals for readability
+        clean_sql = sql.replace("&nbsp;", " ")
+        clean_sql = clean_sql.replace("&amp;", "&")
+        clean_sql = clean_sql.replace("&lt;", '<')
+        clean_sql = clean_sql.replace("&le;", '<=')
+        clean_sql = clean_sql.replace("&gt;", '>')
+        clean_sql = clean_sql.replace("&ge;", '>=')
+
+        self.clean_sql = clean_sql
 
     # Set column name @ self.data_field
     def set_data_field(self):
@@ -112,6 +140,9 @@ class Control:
     def set_jvar(self):
         if self.element.find(f"{controlNS}ExposedClientIdJavascriptVariable") is not None:
             self.jvar = self.element.find(f"{controlNS}ExposedClientIdJavascriptVariable").text
+
+    def set_clean_formula(self, clean_formula):
+        self.clean_formula = clean_formula
 
     # Find controls where this unique ID is referenced
     def get_control_occurences(self, controls: list, variables: list):
@@ -157,10 +188,10 @@ class Control:
     # Return summarization of control properties when this control references another control
     def get_occurence_string(self, occurence_type: str) -> str:
         if occurence_type == 'calc':
-            return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.formula}}}"
+            return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.clean_formula}}}"
 
         if occurence_type == 'sql':
-            return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.sql}}}"
+            return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.clean_sql}}}"
 
     # String representation of control properties. Would like to jsonify this...
     def __str__(self) -> str:
@@ -170,15 +201,17 @@ class Control:
                 f"control id : {self.control_id} \n" \
                 f"type : {self.simple_type} \n" \
                 f"formula : {self.formula} \n" \
-                 f"sql : {self.sql} \n" \
-                 f"Column Name : {self.data_field} \n" \
-                 f"In Workflow : {self.in_workflow} \n" \
-                 f"Rule Occurence : {self.rule_occurences} \n" \
-                 f"Formula Occurence : {self.control_formula_occurences} \n" \
-                 f"SQL Occurences : {self.control_sql_occurences} \n" \
-                 f"Variable Occurences : {self.variable_occurences} \n" \
-                 f"JavaScript Var : {self.jvar} \n" \
-                 f"In Script : {self.in_script} \n" \
-                 f"}}\n \n"
+                f"clean formula : {self.clean_formula} \n" \
+                f"sql : {self.sql} \n" \
+                f"clean sql : {self.clean_sql} \n " \
+                f"Column Name : {self.data_field} \n" \
+                f"In Workflow : {self.in_workflow} \n" \
+                f"Rule Occurence : {self.rule_occurences} \n" \
+                f"Formula Occurence : {self.control_formula_occurences} \n" \
+                f"SQL Occurences : {self.control_sql_occurences} \n" \
+                f"Variable Occurences : {self.variable_occurences} \n" \
+                f"JavaScript Var : {self.jvar} \n" \
+                f"In Script : {self.in_script} \n" \
+                f"}}\n \n"
 
         return string
