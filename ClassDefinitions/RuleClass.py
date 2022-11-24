@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+import json
 
 formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
@@ -55,23 +56,46 @@ class Rule:
             self.clean_expression_value = clean_expression
 
     # Summarization of rule properties for when it is referenced in control string representation
-    def get_occurence_string(self) -> str:
+    def get_occurrence_string(self) -> str:
         if self.rule_type == 'Formatting':
             return f"{{Name: {self.title}, Type: {self.rule_type}, Hide: {self.hide}, Disable: {self.disable}, Expression: {self.clean_expression_value}}}"
 
         if self.rule_type == 'Validation':
             return f"{{Name: {self.title}, Type: {self.rule_type}, Expression: {self.clean_expression_value}}}"
 
+    def get_occurrence_dict(self) -> dict:
+        if self.rule_type == 'Formatting':
+            return {"Name": self.title, "Type": self.rule_type, "Hide": self.hide, "Disable": self.disable, "Expression": self.clean_expression_value}
+
+        if self.rule_type == 'Validation':
+            return {"Name": self.title, "Type": self.rule_type, "Expression": self.clean_expression_value}
+
     # String representation of rule properties for writing to txt files & console
     def __str__(self) -> str:
-        string = f"{{\n"  \
-                f"type: {self.rule_type} \n" \
-                f"id: {self.unique_id} \n" \
-                f"title: {self.title} \n" \
-                f"expression : {self.expression_value} \n" \
-                f"clean expression : {self.clean_expression_value} \n" \
-                f"effected control id's : {self.control_id_list} \n" \
-                f"effected control names : {self.control_name_list} \n" \
-                f"hide : {self.hide} \n " \
-                f"disable : {self.disable} \n}} \n \n"
-        return string
+        # string = f"{{\n"  \
+        #         f"type: {self.rule_type} \n" \
+        #         f"id: {self.unique_id} \n" \
+        #         f"title: {self.title} \n" \
+        #         f"expression : {self.expression_value} \n" \
+        #         f"clean expression : {self.clean_expression_value} \n" \
+        #         f"effected control id's : {self.control_id_list} \n" \
+        #         f"effected control names : {self.control_name_list} \n" \
+        #         f"hide : {self.hide} \n " \
+        #         f"disable : {self.disable} \n}} \n \n"
+        # return string
+        return self.get_json()
+
+    def get_json(self) -> str:
+        dict = {
+            "type": self.rule_type,
+            "id": self.unique_id,
+            "title": self.title,
+            "expression": self.expression_value,
+            "clean expression": self.clean_expression_value,
+            "effected controls id": self.control_id_list,
+            "effected controls name": self.control_name_list,
+            "hide": self.hide,
+            "disable": self.disable
+        }
+
+        return json.dumps(dict, indent=4)

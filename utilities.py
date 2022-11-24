@@ -102,7 +102,7 @@ def get_unconnected_unreferenced_controls(unconnected_list: list, unreferenced_l
 
     return uncon_unref
 
-
+# Get form filepath so you dont have to manually change filename in main()
 def get_form_filepath(relative_path: str) -> str:
     forms_names = os.listdir(relative_path)
 
@@ -111,7 +111,7 @@ def get_form_filepath(relative_path: str) -> str:
 
     return form_file_path
 
-
+# Get workflow filepath's so you dont have to manually change filenames in main()
 def get_workflow_filepath(relative_path: str) -> list:
     workflow_paths = os.listdir(relative_path)
     workflow_filepaths = list()

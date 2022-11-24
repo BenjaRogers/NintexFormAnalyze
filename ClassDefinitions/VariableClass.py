@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-
+import json
 formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
 controlIDNS = '{http://schemas.microsoft.com/2003/10/Serialization/Arrays}'
@@ -19,8 +19,11 @@ class Variable:
         self.set_variable_expression()
 
     # Summarization of variable properties when referenced by controls
-    def get_occurence_string(self):
+    def get_occurrence_string(self):
         return f"{{Name: {self.name}, Type: {self.type}, Expression: {self.expression}}}"
+
+    def get_occurrence_dict(self):
+        return {"Name": self.name, "Type": self.type, "Expression": self.expression}
 
     # set expression value
     def set_variable_expression(self):
@@ -35,12 +38,24 @@ class Variable:
         self.expression = clean_expression
     # String representation of variable properties
     def __str__(self):
-        string = f"{{\n" \
-                 f"Name : {self.name} \n" \
-                 f"ID : {self.id} \n" \
-                 f"Expression : {self.expression} \n" \
-                 f"Connected : {self.connected} \n" \
-                 f"Type : {self.type}\n" \
-                 f"}}\n \n"
+        # string = f"{{\n" \
+        #          f"Name : {self.name} \n" \
+        #          f"ID : {self.id} \n" \
+        #          f"Expression : {self.expression} \n" \
+        #          f"Connected : {self.connected} \n" \
+        #          f"Type : {self.type}\n" \
+        #          f"}}\n \n"
+        #
+        # return string
+        return self.get_json_string()
 
-        return string
+    def get_json_string(self) -> str:
+        dict = {
+            "name": self.name,
+            "id": self.id,
+            "expression": self.expression,
+            "connected": self.connected,
+            "type": self.type
+        }
+
+        return json.dumps(dict, indent=4)

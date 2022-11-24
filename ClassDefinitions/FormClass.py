@@ -144,17 +144,16 @@ class Form:
                     if control.unique_id in rule.expression_value:
                         rule.clean_expression_value = rule.clean_expression_value.replace(control.unique_id, control.name)
 
-
-    # Iterate all controls and set control occurence properties in rules, variables, calculations, sql queries,
-    # js script and associated SP column usage in workflows (still need to add wf occurence)
+    # Iterate all controls and set control occurrence properties in rules, variables, calculations, sql queries,
+    # js script and associated SP column usage in workflows (still need to add wf occurrence)
     def set_control_occurence_properties(self):
         for control in self.control_objects_list:
-            control.get_control_occurences(self.control_objects_list, self.variable_objects_list)
-            control.get_rule_occurences(self.rule_objects_list)
-            control.get_script_occurences(self.script)
+            control.get_control_occurrences(self.control_objects_list, self.variable_objects_list)
+            control.get_rule_occurrences(self.rule_objects_list)
+            control.get_script_occurrences(self.script)
 
             for workflow in self.workflows:
-                control.get_workflow_occurences(workflow.field_objects)
+                control.get_workflow_occurrences(workflow.field_objects)
 
     # Create list of controls that are not referenced in rules, formulas or sql queries to write to txt files
     def get_unreferenced_controls(self) -> list:

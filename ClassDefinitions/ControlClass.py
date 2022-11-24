@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import re
+import json
 
 from ClassDefinitions.WorkflowClass import WorkFlow
 """ CONTROL ID's
@@ -43,10 +44,18 @@ class Control:
         self.control_id = element.find(f"{controlNS}FormControlTypeUniqueId").text  # element FormControlTypeUniqueID
         self.data_field = None
         self.jvar = None
+
         self.control_formula_occurences = list()
+        self.control_formula_occurences_json = list()
+
         self.control_sql_occurences = list()
+        self.control_sql_occurences_json = list()
+
         self.rule_occurences = list()
+        self.rule_occurences_json = list()
+
         self.variable_occurences = list()
+        self.variable_occurrences_json = list()
 
         self.set_data_field()
         self.set_jvar()
@@ -145,73 +154,118 @@ class Control:
         self.clean_formula = clean_formula
 
     # Find controls where this unique ID is referenced
-    def get_control_occurences(self, controls: list, variables: list):
+    def get_control_occurrences(self, controls: list, variables: list):
         for control in controls:
             if control.formula is not None:
                 if self.unique_id in control.formula:
-                    self.control_formula_occurences.append(control.get_occurence_string('calc'))
+                    self.control_formula_occurences.append(control.get_occurrence_string('calc'))
+                    self.control_formula_occurences_json.append(control.get_occurrence_dict('calc'))
+
             if control.sql is not None:
                 if self.unique_id in control.sql:
-                    self.control_sql_occurences.append(control.get_occurence_string('sql'))
+                    self.control_sql_occurences.append(control.get_occurrence_string('sql'))
+                    self.control_sql_occurences_json.append(control.get_occurrence_dict('sql'))
 
         for variable in variables:
             if variable.expression is not None:
                 if self.unique_id in variable.expression:
-                    self.variable_occurences.append(variable.get_occurence_string())
+                    self.variable_occurences.append(variable.get_occurrence_string())
 
     # Find where this control is referenced in rules
-    def get_rule_occurences(self, rules:list):
+    def get_rule_occurrences(self, rules:list):
         for rule in rules:
             if rule.expression_value is not None:
                 if self.unique_id in rule.expression_value:
-                    self.rule_occurences.append(rule.get_occurence_string())
+                    self.rule_occurences.append(rule.get_occurrence_string())
+                    self.rule_occurences_json.append(rule.get_occurrence_dict())
 
     # Find where this control is referenced in form variables
-    def get_variable_occurences(self, variables:list):
+    def get_variable_occurrences(self, variables:list):
         for variable in variables:
             if self.unique_id in variable.expression:
                 self.variable_occurences.append(variable)
+                self.variable_occurrences_json.append(variable.get_json_string())
 
     # Find if this control is referenced in form script
-    def get_script_occurences(self, form_script: str):
+    def get_script_occurrences(self, form_script: str):
         if self.jvar is not None:
             if self.jvar in form_script:
                 self.in_script = True
 
     # Find if this control's connected SP property is referenced in workflow(s)
-    def get_workflow_occurences(self, field_references: list):
+    def get_workflow_occurrences(self, field_references: list):
         for field in field_references:
             if self.data_field == field.display_name:
                 self.in_workflow = True
                 break
 
     # Return summarization of control properties when this control references another control
-    def get_occurence_string(self, occurence_type: str) -> str:
+    def get_occurrence_string(self, occurence_type: str) -> str:
+
         if occurence_type == 'calc':
-            return f"{{Name: {self.name}, ID: {self.unique_id}, Formula: {self.clean_formula}}}"
+            string = f"{{Name: {self.name}," \
+                   f"ID: {self.unique_id}," \
+                   f"Formula: {self.clean_formula}}}"
 
         if occurence_type == 'sql':
-            return f"{{Name: {self.name}, ID: {self.unique_id}, SQL: {self.clean_sql}}}"
+            string = f"{{Name: {self.name}," \
+                   f"ID: {self.unique_id}," \
+                   f"SQL: {self.clean_sql}}}"
+
+        return string
+
+    # Build dictionary representation of occurrence to serialize for JSON formatting
+    def get_occurrence_dict(self, occurence_type:str) -> dict:
+        if occurence_type == 'calc':
+            return {"Name": self.name, "ID": self.unique_id, "Formula": self.clean_formula}
+
+        if occurence_type == 'sql':
+            return {"Name": self.name, "ID": self.unique_id, "SQL": self.clean_sql}
+
+
 
     # String representation of control properties. Would like to jsonify this...
     def __str__(self) -> str:
-        string = f"{{\n"  \
-                f"name : {self.name} \n" \
-                f"unique id : {self.unique_id} \n" \
-                f"control id : {self.control_id} \n" \
-                f"type : {self.simple_type} \n" \
-                f"formula : {self.formula} \n" \
-                f"clean formula : {self.clean_formula} \n" \
-                f"sql : {self.sql} \n" \
-                f"clean sql : {self.clean_sql} \n " \
-                f"Column Name : {self.data_field} \n" \
-                f"In Workflow : {self.in_workflow} \n" \
-                f"Rule Occurence : {self.rule_occurences} \n" \
-                f"Formula Occurence : {self.control_formula_occurences} \n" \
-                f"SQL Occurences : {self.control_sql_occurences} \n" \
-                f"Variable Occurences : {self.variable_occurences} \n" \
-                f"JavaScript Var : {self.jvar} \n" \
-                f"In Script : {self.in_script} \n" \
-                f"}}\n \n"
+        # string = f"{{\n"  \
+        #         f"name : {self.name} \n" \
+        #         f"unique id : {self.unique_id} \n" \
+        #         f"control id : {self.control_id} \n" \
+        #         f"type : {self.simple_type} \n" \
+        #         f"formula : {self.formula} \n" \
+        #         f"clean formula : {self.clean_formula} \n" \
+        #         f"sql : {self.sql} \n" \
+        #         f"clean sql : {self.clean_sql} \n" \
+        #         f"Column Name : {self.data_field} \n" \
+        #         f"In Workflow : {self.in_workflow} \n" \
+        #         f"Rule Occurence : {self.rule_occurences} \n" \
+        #         f"Formula Occurence : {self.control_formula_occurences} \n" \
+        #         f"SQL Occurences : {self.control_sql_occurences} \n" \
+        #         f"Variable Occurences : {self.variable_occurences} \n" \
+        #         f"JavaScript Var : {self.jvar} \n" \
+        #         f"In Script : {self.in_script} \n" \
+        #         f"}}\n \n"
+        #
+        # return string
+        return self.get_json()
 
-        return string
+    def get_json(self) -> str:
+        dict = {
+            "name": self.name,
+            "unique id": self.unique_id,
+            "control id": self.control_id,
+            "type": self.simple_type,
+            "formula": self.formula,
+            "clean formula": self.clean_formula,
+            "sql": self.clean_formula,
+            "clean sql": self.clean_sql,
+            "column name": self.data_field,
+            "in workflow": self.in_workflow,
+            "rule occurrence": self.rule_occurences_json,
+            "formula occurrence": self.control_formula_occurences_json,
+            "sql occurrence": self.control_sql_occurences_json,
+            "variable occurence": self.variable_occurrences_json,
+            "javascript var": self.jvar,
+            "in script": self.in_script
+        }
+
+        return json.dumps(dict, indent=4)
