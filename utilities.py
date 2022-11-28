@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
+import treelib as tl
 
 formNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms}'
 controlNS = '{http://schemas.datacontract.org/2004/07/Nintex.Forms.FormControls}'
@@ -120,3 +121,12 @@ def get_workflow_filepath(relative_path: str) -> list:
     for workflow in workflow_paths:
         workflow_filepaths.append(str(relative_path) + '/' + str(workflow))
     return workflow_filepaths
+
+def create_control_tree(control_object) -> str:
+    tree = tl.Tree()
+    tree.create_node(control_object.name, control_object.unique_id)
+    if len(control_object.referenced_controls_id) > 0:
+        for ref_control in control_object.referenced_controls_names:
+            tree.create_node(ref_control, ref_control, parent=control_object.unique_id)
+
+    tree.show()
