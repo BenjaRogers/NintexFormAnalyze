@@ -57,6 +57,9 @@ class Control:
         self.variable_occurences = list()
         self.variable_occurrences_json = list()
 
+        self.referenced_controls_names = list()
+        self.referenced_controls_id = list()
+
         self.set_data_field()
         self.set_jvar()
 
@@ -265,7 +268,8 @@ class Control:
             "sql occurrence": self.control_sql_occurences_json,
             "variable occurence": self.variable_occurrences_json,
             "javascript var": self.jvar,
-            "in script": self.in_script
+            "in script": self.in_script,
+            "referenced controls": self.referenced_controls_names
         }
 
         return json.dumps(dict, indent=4)

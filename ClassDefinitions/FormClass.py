@@ -116,6 +116,8 @@ class Form:
                 for compare_control in self.control_objects_list:
                     if compare_control.unique_id in control.formula:
                         control.clean_formula = control.clean_formula.replace(compare_control.unique_id, compare_control.name)
+                        control.referenced_controls_names.append(compare_control.name)
+                        control.referenced_controls_id.append(compare_control.unique_id)
 
                 # Replace variable ID with variable name
                 # These are still called {Control:unique-id} in xml. So replace "Control" with "Variable" for clarity

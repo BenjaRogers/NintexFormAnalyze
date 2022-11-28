@@ -16,4 +16,3 @@ class Field:
                  f"Type : {self.type}\n" \
                  f"}}\n \n"
         return string
-

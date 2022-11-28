@@ -2,6 +2,8 @@ import xml.etree.ElementTree as ET
 from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
 from ClassDefinitions.FormClass import Form
+from ClassDefinitions.ConsoleClass import Console
+
 from utilities import *
 import os
 
@@ -99,18 +101,6 @@ if __name__ == '__main__':
         out_script.write(form.script)
     out_script.close()
 
-    # inp = 1
-    # searched_control = None
-    # while inp != 0:
-    #     inp = input("Enter control Name or ID: \n -> ")
-    #
-    #     for control in form.control_objects_list:
-    #         if inp == control.name or inp == control.unique_id:
-    #              searched_control = control
-    #              break
-    #     if searched_control:
-    #         print(searched_control)
+    console = Console(form)
 
-
-
-
+    console.main_loop()
