@@ -109,10 +109,8 @@ def get_form_filepath(relative_path: str) -> str:
 
 
     for file in forms_names:
-        print(file)
         if file != '.gitignore':
             form_file_path = str(relative_path) + '/' + str(file)
-            print(form_file_path)
     return form_file_path
 
 # Get workflow filepath's so you dont have to manually change filenames in main()
