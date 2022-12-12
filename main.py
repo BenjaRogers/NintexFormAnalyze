@@ -3,6 +3,7 @@ from ClassDefinitions.ControlClass import Control
 from ClassDefinitions.RuleClass import Rule
 from ClassDefinitions.FormClass import Form
 from ClassDefinitions.ConsoleClass import Console
+from ClassDefinitions.LintClass import Linter, RuleLinter, ControlLinter
 
 from utilities import *
 import os
@@ -100,6 +101,9 @@ if __name__ == '__main__':
     if form.script is not None:
         out_script.write(form.script)
     out_script.close()
+
+    control_lint = ControlLinter(form.control_objects_list)
+    rule_lint = RuleLinter(form.rule_objects_list)
 
     console = Console(form)
 

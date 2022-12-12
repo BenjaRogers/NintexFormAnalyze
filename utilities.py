@@ -122,11 +122,3 @@ def get_workflow_filepath(relative_path: str) -> list:
         workflow_filepaths.append(str(relative_path) + '/' + str(workflow))
     return workflow_filepaths
 
-def create_control_tree(control_object) -> str:
-    tree = tl.Tree()
-    tree.create_node(control_object.name, control_object.unique_id)
-    if len(control_object.referenced_controls_id) > 0:
-        for ref_control in control_object.referenced_controls_names:
-            tree.create_node(ref_control, ref_control, parent=control_object.unique_id)
-
-    tree.show()
