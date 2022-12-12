@@ -259,7 +259,7 @@ class Control:
             "type": self.simple_type,
             "formula": self.formula,
             "clean formula": self.clean_formula,
-            "sql": self.clean_formula,
+            "sql": self.sql,
             "clean sql": self.clean_sql,
             "column name": self.data_field,
             "in workflow": self.in_workflow,

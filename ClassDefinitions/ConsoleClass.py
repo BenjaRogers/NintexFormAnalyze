@@ -26,6 +26,7 @@ class Console:
                 else:
                     print("This control doesn't exist")
 
+
     def search_control_object(self, query: str) -> Control:
         for control in self.form.control_objects_list:
             if query == control.name or query == control.unique_id:
@@ -43,6 +44,8 @@ class Console:
                 tree.paste(node_id, self.build_control_tree_recursive(ref_control_object, control_id_list))
 
         return tree
+
+
 
     def generate_node_id(self, control_id_list: list, control_unique_id: str) -> str:
         if control_unique_id in control_id_list:
