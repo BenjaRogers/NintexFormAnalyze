@@ -107,9 +107,12 @@ def get_unconnected_unreferenced_controls(unconnected_list: list, unreferenced_l
 def get_form_filepath(relative_path: str) -> str:
     forms_names = os.listdir(relative_path)
 
-    if len(forms_names) == 1:
-        form_file_path = str(relative_path) + '/' + str(forms_names[0])
 
+    for file in forms_names:
+        print(file)
+        if file != '.gitignore':
+            form_file_path = str(relative_path) + '/' + str(file)
+            print(form_file_path)
     return form_file_path
 
 # Get workflow filepath's so you dont have to manually change filenames in main()
@@ -119,6 +122,7 @@ def get_workflow_filepath(relative_path: str) -> list:
     print(workflow_paths)
 
     for workflow in workflow_paths:
-        workflow_filepaths.append(str(relative_path) + '/' + str(workflow))
+        if workflow != '.gitignore':
+            workflow_filepaths.append(str(relative_path) + '/' + str(workflow))
     return workflow_filepaths
 
