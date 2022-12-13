@@ -102,8 +102,22 @@ if __name__ == '__main__':
         out_script.write(form.script)
     out_script.close()
 
+    # Check controls & rules for potential errors
     control_lint = ControlLinter(form.control_objects_list)
     rule_lint = RuleLinter(form.rule_objects_list)
+
+    # Print errors to console
+    if str(control_lint):
+        print("Issue found... Check output/ControlErrors.js")
+        print(control_lint)
+    else:
+        print("No errors found in controls.")
+
+    if str(rule_lint):
+        print("Issue found... Check output/RuleErrors.js.")
+        print(rule_lint)
+    else:
+        print("No errors found in rules.")
 
     console = Console(form)
 

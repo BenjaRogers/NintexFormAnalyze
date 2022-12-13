@@ -9,6 +9,7 @@ class Linter:
         self.output_string = ""
         self.output_relative_path = output_relative_path
 
+    # Check that there is a closing bracket for every opening bracket
     def check_brackets(self, object_formula, object_clean_formula, object_name):
         open_bracket_count = object_formula.count('[')
         close_bracket_count = object_formula.count(']')
@@ -21,6 +22,7 @@ class Linter:
 
         return ""
 
+    # Check that there is a closing parenthesis for every opening parenthesis
     def check_parenthesis(self, object_formula, object_clean_formula, object_name):
         open_par = object_formula.count('(')
         close_par = object_formula.count(')')
@@ -33,6 +35,7 @@ class Linter:
 
         return ""
 
+    # Check that there is an even number of double quotes
     def check_double_quote(self, object_formula, object_clean_formula, object_name):
         quote_count = object_formula.count('"')
 
@@ -42,6 +45,7 @@ class Linter:
         else:
             return f"//{object_name} missing double quotation mark \n{object_name} = {object_clean_formula} \n"
 
+    # Check that there is an even number of single quotes
     def check_single_quote(self, object_formula, object_clean_formula, object_name):
         quote_count = object_formula.count("'")
 
@@ -50,6 +54,10 @@ class Linter:
 
         else:
             return f"//{object_name} missing single quotation mark \n{object_name} = {object_clean_formula} \n"
+
+    # spit out output_string if str called
+    def __str__(self):
+        return self.output_string
 
 # Subclass of parent Linter, check for errors in calculation control formulas
 class ControlLinter(Linter):

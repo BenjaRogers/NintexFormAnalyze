@@ -48,6 +48,9 @@ class Control:
         self.control_formula_occurences = list()
         self.control_formula_occurences_json = list()
 
+        self.control_occurrences_names = list()
+        self.control_occurrences_id = list()
+
         self.control_sql_occurences = list()
         self.control_sql_occurences_json = list()
 
@@ -164,10 +167,16 @@ class Control:
                     self.control_formula_occurences.append(control.get_occurrence_string('calc'))
                     self.control_formula_occurences_json.append(control.get_occurrence_dict('calc'))
 
+                    self.control_occurrences_names.append(control.name)
+                    self.control_occurrences_id.append(control.unique_id)
+
             if control.sql is not None:
                 if self.unique_id in control.sql:
                     self.control_sql_occurences.append(control.get_occurrence_string('sql'))
                     self.control_sql_occurences_json.append(control.get_occurrence_dict('sql'))
+
+                    self.control_occurrences_names.append(control.name)
+                    self.control_occurrences_id.append(control.unique_id)
 
         for variable in variables:
             if variable.expression is not None:
